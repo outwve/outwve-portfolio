@@ -221,7 +221,103 @@
       #contact { padding: 80px 24px; }
       footer { padding: 40px 24px; }
     }
-  </style>
+  
+/* PROJECT 01 — Postobón × Netflix cinematic thumbnail */
+.project-thumb-video {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  background: #0a0a0a;
+  cursor: pointer;
+}
+.project-thumb-video .video-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(160deg, #1a0008 0%, #2d0010 25%, #0d0000 60%, #000 100%);
+}
+.project-thumb-video .video-brand-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #E8002D 0%, #fff 50%, #E50914 100%);
+}
+.project-thumb-video .video-logos {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 80%;
+}
+.project-thumb-video .logo-postobon {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 1.8vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #E8002D;
+  margin-bottom: 10px;
+  display: block;
+}
+.project-thumb-video .logo-divider {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  margin: 0 auto 10px;
+}
+.project-thumb-video .logo-netflix {
+  font-family: var(--sans);
+  font-size: clamp(0.55rem, 1.4vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #E50914;
+  display: block;
+}
+.project-thumb-video .video-title-text {
+  position: absolute;
+  bottom: 56px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: clamp(0.65rem, 1.5vw, 0.9rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+}
+.project-thumb-video .video-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.project-thumb-video .play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.project-thumb-video:hover .play-overlay { opacity: 1; }
+.project-thumb-video .play-overlay-circle {
+  width: 56px;
+  height: 56px;
+  border: 1.5px solid rgba(255,255,255,0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
 </head>
 <body>
 
