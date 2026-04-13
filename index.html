@@ -1,1 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OUTWVE â Audiovisual</title>
+  <meta name="description" content="OUTWVE â Audiovisual production. Direction, editing and cinematography. / ProducciÃ³n audiovisual. DirecciÃ³n, ediciÃ³n y cinematografÃ­a.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #000; --white: #fff;
+      --g1: #111; --g2: #1a1a1a; --g3: #2a2a2a; --g4: #555; --g5: #888;
+      --sans: 'Syne', sans-serif; --mono: 'Space Mono', monospace;
+      --ease: cubic-bezier(0.16,1,0.3,1); --nav-h: 72px;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { background: #000; color: #fff; font-family: var(--sans); font-weight: 300; line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    ::selection { background: #fff; color: #000; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    .nav-links a .en, .nav-links a .es { display: inline; font-style: normal; font-size: inherit; color: inherit; }
+    .nav-links a .en::after { content: ' Â· '; opacity: 0.4; }
+    .nav-links a .es { opacity: 0.6; }
+    .section-label .en, .section-label .es { display: inline; font-style: normal; }
+    .section-label .en::after { content: ' / '; opacity: 0.4; }
+    .section-label .es { opacity: 0.65; }
+    .stat-label .en, .stat-label .es { display: inline; font-style: normal; }
+    .stat-label .en::after { content: ' / '; opacity: 0.35; }
+    .stat-label .es { opacity: 0.65; }
+    .filter-btn .en, .filter-btn .es { display: inline; font-style: normal; }
+    .filter-btn .en::after { content: ' / '; opacity: 0.4; }
+    .filter-btn .es { opacity: 0.65; }
+    .play-label .en, .play-label .es { display: inline; font-style: normal; }
+    .play-label .en::after { content: ' Â· '; opacity: 0.4; }
+    .play-label .es { opacity: 0.65; }
+    .service-title .en { display: block; color: #fff; }
+    .service-title .es { font-size: 0.82em; margin-top: 3px; color: var(--g5); }
+    .service-desc .en { display: block; color: var(--g5); }
+    .service-desc .es { font-size: 0.87em; color: var(--g4); margin-top: 10px; }
+    .footer-copy .en, .footer-copy .es { display: inline; }
+    .footer-copy .en::after { content: ' | '; opacity: 0.3; }
 
+    /* CURSOR â solo desktop con mouse */
+    .cursor { position: fixed; width: 8px; height: 8px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s var(--ease), height .2s var(--ease); mix-blend-mode: difference; }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width .35s var(--ease), height .35s var(--ease), opacity .35s; mix-blend-mode: difference; }
+    .cursor.hovered { width: 16px; height: 16px; }
+    .cursor-ring.hovered { width: 56px; height: 56px; opacity: 0.6; }
+    @media (hover: none), (pointer: coarse) { .cursor, .cursor-ring { display: none !important; } }
+
+    /* NAVBAR */
+    #navbar { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; z-index: 1000; transition: background .4s, backdrop-filter .4s; }
+    #navbar.scrolled { background: rgba(0,0,0,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .nav-logo { display: flex; align-items: center; }
+    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-logo-text { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: #fff; display: none; }
+    .nav-logo img.failed { display: none; }
+    .nav-logo img.failed ~ .nav-logo-text { display: block; }
+    .nav-links { display: flex; list-style: none; gap: 40px; }
+    .nav-links a { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; transition: opacity .2s; }
+    .nav-links a:hover { opacity: 1; }
+
+    /* HAMBURGER */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; z-index: 1001; }
+    .hamburger span { display: block; width: 24px; height: 1.5px; background: #fff; transition: all 0.35s var(--ease); }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* HERO */
+    #hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: calc(var(--nav-h) + 60px) 80px 80px; position: relative; overflow: hidden; }
+    .hero-reel-placeholder { position: absolute; inset: 0; background: linear-gradient(135deg, #0a0a0a 0%, #111 40%, #1a1a1a 100%); z-index: 0; }
+    .hero-reel-placeholder::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 70%); }
+    .hero-content { position: relative; z-index: 1; width: 100%; max-width: 1200px; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 9px 22px; border: 1px solid rgba(255,255,255,0.13); border-radius: 100px; background: rgba(255,255,255,0.04); font-family: var(--mono); font-size: 0.61rem; letter-spacing: 0.17em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 48px; animation: fadeUp 1s ease-out .3s both; }
+    .hero-eyebrow::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.6); flex-shrink: 0; animation: blink 2.5s ease-in-out infinite; }
+    .hero-eyebrow .en::after { content: ' Â· '; opacity: 0.35; }
+    .hero-eyebrow .es { opacity: 0.75; }
+    @keyframes blink { 0%,100%{opacity:.4;transform:scale(1);} 50%{opacity:1;transform:scale(1.5);} }
+    .hero-title { display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: start; font-size: clamp(2rem, 4.5vw, 5.2rem); position: relative; width: 100%; margin-bottom: 52px; animation: fadeUp 1s ease-out .5s both; }
+    .hero-title::after { content: ''; position: absolute; left: 50%; top: 5%; height: 90%; width: 1px; background: rgba(255,255,255,0.08); pointer-events: none; }
+    .hero-title-en { font-family: var(--sans); color: #fff; font-weight: 700; line-height: 1.06; letter-spacing: -0.035em; text-align: right; padding-right: 52px; }
+    .hero-title-en em { font-style: italic; color: rgba(255,255,255,0.52); }
+    .hero-title-es { font-family: var(--sans); color: rgba(255,255,255,0.65); font-weight: 700; font-style: italic; line-height: 1.06; letter-spacing: -0.03em; text-align: left; padding-left: 52px; }
+    .hero-title-es em { font-style: normal; }
+    .hero-bottom-row { display: flex; align-items: center; gap: 40px; animation: fadeUp 1s ease-out .8s both; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 8px; transition: border-color .2s, opacity .2s; }
+    .hero-cta:hover { border-color: #fff; opacity: 0.8; }
+    .hero-cta .en::after { content: ' Â· '; opacity: 0.4; }
+    .hero-cta .es { opacity: 0.55; font-size: 0.92em; }
+    .hero-meta { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; opacity: 0.35; text-transform: uppercase; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* SHOWREEL */
+    #showreel { padding: 0; }
+    .showreel-outer { height: 260vh; position: relative; }
+    .showreel-sticky { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .showreel-wrapper { position: relative; width: 72vw; max-width: 1100px; aspect-ratio: 16/9; background: var(--g2); overflow: hidden; cursor: pointer; border-radius: 14px; box-shadow: 0 40px 100px rgba(0,0,0,0.6); will-change: width, border-radius; }
+    .showreel-wrapper img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); transition: transform .6s var(--ease); }
+    .showreel-wrapper:hover img { transform: scale(1.03); }
+    .play-btn { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+    .play-circle { width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .3s, border-color .3s; }
+    .showreel-wrapper:hover .play-circle { transform: scale(1.1); border-color: #fff; }
+    .play-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.7; }
+
+    /* MARQUEE */
+    .marquee-wrap { overflow: hidden; border-top: 1px solid #222; border-bottom: 1px solid #222; padding: 20px 0; margin: 0 0 160px; }
+    .marquee-track { display: flex; gap: 0; animation: marquee 32s linear infinite; white-space: nowrap; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-item { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.45; padding: 0 32px; }
+    .marquee-item::after { content: 'Â·'; margin-left: 32px; opacity: 0.3; }
+
+    /* ABOUT */
+    #about { padding: 0 80px 160px; }
+    .section-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-bottom: 56px; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .about-text h2 { font-size: clamp(2.3rem, 3.8vw, 3.8rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 40px; }
+    .about-text h2 .en { display: block; }
+    .about-text h2 em { font-style: italic; color: #888; }
+    .about-text h2 .es { display: block; color: rgba(255,255,255,0.5); font-style: italic; margin-top: 6px; font-size: 0.8em; }
+    .about-text p { font-size: 1rem; line-height: 1.75; margin-bottom: 24px; }
+    .about-text p .en { display: block; color: #aaa; }
+    .about-text p .es { display: block; color: #666; font-size: 0.87em; margin-top: 12px; font-style: italic; }
+    .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 56px; padding-top: 40px; border-top: 1px solid #222; }
+    .stat-number { font-size: 2rem; font-weight: 300; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .stat-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.5; }
+    .about-image-inner { overflow: hidden; aspect-ratio: 3/4; background: var(--g2); position: relative; }
+    .about-image-inner img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+    .about-image-inner img.failed { display: none; }
+    .about-image-inner .about-image-fallback { display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%); color: #666; }
+    .about-image-inner.no-image .about-image-fallback { display: flex; }
+    .about-image-fallback .fallback-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+    .about-image-fallback .fallback-text { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.4; }
+    .about-image-fallback .fallback-text .en { display: block; }
+    .about-image-fallback .fallback-text .es { display: block; margin-top: 4px; font-size: 0.75em; }
+    .about-image:hover .about-image-inner img:not(.failed) { transform: scale(1.04); }
+    .about-image-tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.4; margin-top: 16px; }
+    .about-image-tag .en::after { content: ' Â· '; opacity: 0.4; }
+
+    /* WORK */
+    #work { padding: 0 80px 160px; }
+    .work-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 64px; flex-wrap: wrap; gap: 24px; }
+    .work-header h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 300; letter-spacing: -0.02em; }
+    .work-header h2 .en { display: inline; }
+    .work-header h2 .en::after { content: ' / '; opacity: 0.4; }
+    .work-header h2 .es { display: inline; opacity: 0.65; }
+    .work-filter { display: flex; gap: 16px; flex-wrap: wrap; }
+    .filter-btn { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 18px; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); transition: all .2s; background: none; cursor: pointer; }
+    .filter-btn.active, .filter-btn:hover { border-color: #fff; color: #fff; }
+    .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .project-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .project-card:nth-child(even) { transform: translateY(64px); }
+    .project-thumb { position: relative; overflow: hidden; aspect-ratio: 4/5; background: var(--g2); }
+    .project-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); filter: brightness(0.85); }
+    .project-card:hover .project-thumb img { transform: scale(1.04); }
+    .project-number { position: absolute; top: 16px; left: 16px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; opacity: 0.5; }
+    .project-category-tag { position: absolute; top: 16px; right: 16px; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.25); padding: 4px 10px; opacity: 0.7; }
+    .project-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity .3s; display: flex; align-items: center; justify-content: center; }
+    .project-overlay-icon { width: 52px; height: 52px; border: 1px solid rgba(255,255,255,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .project-card:hover .project-overlay { opacity: 1; }
+    .project-info { padding: 20px 0 0; }
+    .project-title { font-size: 1rem; font-weight: 400; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .project-meta { display: flex; gap: 16px; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.45; }
+
+    /* Touch feedback */
+    @media (hover: none) {
+      .project-card:active .project-overlay { opacity: 1; }
+      .project-card:active .play-overlay { opacity: 1; }
+      .project-thumb-video:active .play-overlay { opacity: 1; }
+      .service-card:active { background: var(--g1); border-color: var(--g4); }
+      .filter-btn:active { border-color: #fff; color: #fff; }
+    }
+
+    /* SERVICES */
+    #services { padding: 0 80px 160px; }
+    #services .section-label { margin-bottom: 56px; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .service-card { padding: 48px 40px; border: 1px solid var(--g3); transition: background .3s, border-color .3s; }
+    .service-card:hover { background: var(--g1); border-color: var(--g4); }
+    .service-num { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; opacity: 0.35; margin-bottom: 24px; }
+    .service-icon { width: 36px; height: 36px; margin-bottom: 24px; opacity: 0.6; stroke: currentColor; }
+    .service-title { font-size: 1.1rem; font-weight: 400; letter-spacing: -0.01em; margin-bottom: 16px; line-height: 1.3; }
+    .service-desc { font-size: 0.88rem; line-height: 1.7; }
+
+    /* CONTACT */
+    #contact { padding: 160px 80px; text-align: center; position: relative; overflow: hidden; background: #0a0a0a; }
+    .contact-bg-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: clamp(6rem, 18vw, 18rem); font-weight: 700; letter-spacing: -0.05em; opacity: 0.025; white-space: nowrap; user-select: none; pointer-events: none; }
+    .contact-inner { position: relative; z-index: 1; }
+    .contact-inner h2 { font-size: clamp(2.5rem, 5vw, 5.5rem); font-weight: 300; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
+    .contact-inner h2 .en { display: block; }
+    .contact-inner h2 .es { display: block; font-size: 0.7em; opacity: 0.5; margin-top: 8px; font-style: italic; }
+    .contact-inner > p { margin-bottom: 48px; color: #888; font-size: 1rem; }
+    .contact-inner > p .en { display: inline; }
+    .contact-inner > p .en::after { content: ' Â· '; opacity: 0.4; }
+    .contact-inner > p .es { display: inline; opacity: 0.6; }
+    .contact-form { max-width: 600px; margin: 0 auto; }
+    .contact-form input, .contact-form textarea { width: 100%; padding: 16px; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.15); color: #fff; font-family: inherit; font-size: 1rem; margin-bottom: 24px; transition: border-color .3s; -webkit-appearance: none; border-radius: 0; }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.25); }
+    .contact-form input:focus, .contact-form textarea:focus { outline: none; border-bottom-color: #fff; }
+    .contact-cta { display: inline-block; padding: 20px 48px; border: 1px solid rgba(255,255,255,0.35); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; background: none; color: #fff; margin-top: 16px; cursor: pointer; transition: all .3s; }
+    .contact-cta:hover { background: #fff; color: #000; }
+    .contact-cta .en { display: block; }
+    .contact-cta .es { display: block; font-size: 0.72em; opacity: 0.65; margin-top: 2px; font-style: italic; }
+
+    /* FOOTER */
+    footer { padding: 60px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #1a1a1a; flex-wrap: wrap; gap: 24px; }
+    .footer-logo { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; opacity: 0.5; }
+    .footer-copy { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; opacity: 0.35; }
+    .footer-location { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.35; }
+
+    /* TABLET */
+    @media (max-width: 1024px) {
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      #navbar { padding: 0 20px; }
+      .hamburger { display: flex; }
+      .nav-links {
+        position: fixed;
+        top: var(--nav-h); left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.97);
+        backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        flex-direction: column; align-items: center; justify-content: center;
+        gap: 48px;
+        transform: translateX(100%);
+        transition: transform 0.4s var(--ease);
+        z-index: 999; list-style: none;
+      }
+      .nav-links.open { transform: translateX(0); }
+      .nav-links a { font-size: 1.1rem; letter-spacing: 0.08em; opacity: 0.9; }
+      .nav-links a .es { opacity: 0.5; }
+
+      #hero { padding: calc(var(--nav-h) + 40px) 20px 60px; }
+      .hero-eyebrow { font-size: 0.55rem; padding: 8px 16px; margin-bottom: 32px; }
+      .hero-title { grid-template-columns: 1fr; gap: 16px; font-size: clamp(1.8rem, 7vw, 3rem); }
+      .hero-title::after { display: none; }
+      .hero-title-en { text-align: left; padding-right: 0; }
+      .hero-title-es { text-align: left; padding-left: 0; font-size: 0.72em; opacity: 0.6; }
+      .hero-bottom-row { flex-direction: column; align-items: flex-start; gap: 20px; }
+
+      #about { padding: 0 20px 80px; }
+      #work { padding: 0 20px 80px; }
+      #services { padding: 0 20px 80px; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-stats { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+
+      .projects-grid { grid-template-columns: 1fr; gap: 40px; }
+      .project-card:nth-child(even) { transform: none; }
+      .work-header { flex-direction: column; align-items: flex-start; margin-bottom: 40px; }
+      .work-filter { gap: 8px; }
+      .filter-btn { padding: 6px 14px; font-size: 0.6rem; }
+
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { padding: 32px 24px; }
+
+      .showreel-outer { height: auto; }
+      .showreel-sticky { position: relative; height: auto; padding: 60px 20px; }
+      .showreel-wrapper { width: 100% !important; border-radius: 10px !important; max-width: none !important; }
+
+      .marquee-wrap { margin-bottom: 80px; }
+      #contact { padding: 80px 20px; }
+      footer { padding: 40px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: clamp(1.6rem, 8vw, 2.4rem); }
+      .stat-number { font-size: 1.6rem; }
+    }
+
+    /* PROJECT 01 â Cinematic thumbnail */
+    .project-thumb-video { position: relative; overflow: hidden; aspect-ratio: 4/5; background: #0a0a0a; cursor: pointer; }
+    .project-thumb-video .video-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #1a0008 0%, #2d0010 25%, #0d0000 60%, #000 100%); }
+    .project-thumb-video .video-brand-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #E8002D 0%, #fff 50%, #E50914 100%); }
+    .project-thumb-video .video-logos { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 80%; }
+    .project-thumb-video .logo-postobon { font-family: var(--mono); font-size: clamp(0.7rem, 1.8vw, 1rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #E8002D; margin-bottom: 10px; display: block; }
+    .project-thumb-video .logo-divider { display: block; width: 40px; height: 1px; background: rgba(255,255,255,0.25); margin: 0 auto 10px; }
+    .project-thumb-video .logo-netflix { font-family: var(--sans); font-size: clamp(0.55rem, 1.4vw, 0.8rem); font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #E50914; display: block; }
+    .project-thumb-video .video-title-text { position: absolute; bottom: 56px; left: 0; right: 0; text-align: center; font-family: var(--sans); font-size: clamp(0.65rem, 1.5vw, 0.9rem); font-weight: 700; letter-spacing: 0.15em; color: rgba(255,255,255,0.7); text-transform: uppercase; }
+    .project-thumb-video .video-grain { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"); background-size: 200px 200px; opacity: 0.4; mix-blend-mode: overlay; pointer-events: none; }
+    .project-thumb-video .play-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; transition: opacity .3s; display: flex; align-items: center; justify-content: center; }
+    .project-thumb-video:hover .play-overlay { opacity: 1; }
+    .project-thumb-video .play-overlay-circle { width: 56px; height: 56px; border: 1.5px solid rgba(255,255,255,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    /* En mobile, play siempre visible */
+    @media (max-width: 768px) {
+      .project-thumb-video .play-overlay { opacity: 1; background: rgba(0,0,0,0.15); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor" class="cursor"></div>
+<div id="cursorRing" class="cursor-ring"></div>
+
+<nav id="navbar">
+  <div class="nav-logo">
+    <img src="https://drive.google.com/thumbnail?id=1fNupdMD7Ps34h-HlSfP8CKa-ZWFgoQlB&sz=w400" alt="OUTWVE Logo" style="height: 36px; width: auto;" loading="eager" fetchpriority="high" referrerpolicy="no-referrer"
+      onerror="this.classList.add('failed');this.nextElementSibling.style.display='block';">
+    <span class="nav-logo-text">OUTWVE</span>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#showreel" class="nav-link"><span class="en">Work</span><span class="es">Trabajo</span></a></li>
+    <li><a href="#about" class="nav-link"><span class="en">About</span><span class="es">Sobre mÃ­</span></a></li>
+    <li><a href="#services" class="nav-link"><span class="en">Services</span><span class="es">Servicios</span></a></li>
+    <li><a href="#contact" class="nav-link"><span class="en">Contact</span><span class="es">Contacto</span></a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-reel-placeholder"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">
+      <span class="en">Audiovisual creation since 2018</span><span class="es">CreaciÃ³n audiovisual desde el 2018</span>
+    </p>
+    <h1 class="hero-title">
+      <div class="hero-title-en">Creating stories<br>that feel<br><em>out of the wave.</em></div>
+      <div class="hero-title-es">Creando historias<br>que se sienten<br><em>fuera de la ola.</em></div>
+    </h1>
+    <div class="hero-bottom-row">
+      <a href="#work" class="hero-cta">
+        <span class="en">View work</span><span class="es">Ver trabajo8/span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+      </a>
+      <div class="hero-meta">MedellÃ­n, Colombia</div>
+    </div>
+  </div>
+</section>
+
+<section id="showreel">
+  <div class="showreel-outer">
+    <div class="showreel-sticky">
+      <div class="showreel-wrapper">
+        <img src="https://images.unsplash.com/photo-1536240478700-b869ad10a2eb?w=1400&q=80" alt="OUTWVE Showreel" loading="lazy">
+        <div class="play-btn">
+          <div class="play-circle">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="white"><path d="M6 4l12 6-12 6V4z"/></svg>
+          </div>
+          <span class="play-label">
+            <span class="en">Watch full showreel</span><span class="es">Ver showreel completo</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Cinematography / CinematografÃ­a</span>
+    <span class="marquee-item">Direction / DirecciÃ³n</span>
+    <span class="marquee-item">Editing / EdiciÃ³n</span>
+    <span class="marquee-item">Color Grading / GradaciÃ³n de Color</span>
+    <span class="marquee-item">Motion Graphics / GrÃ¡ficas en Movimiento</span>
+    <span class="marquee-item">Branded Content / Contenido de Marca</span>
+    <span class="marquee-item">AI Content / Contenido IA</span>
+    <span class="marquee-item">Cinematography / CinematografÃ­a</span>
+    <span class="marquee-item">Direction / DirecciÃ³n</span>
+    <span class="marquee-item">Editing / EdiciÃ³n</span>
+    <span class="marquee-item">Color Grading / GradaciÃ³n de Color</span>
+    <span class="marquee-item">Motion Graphics / GrÃ¡ficas en Movimiento</span>
+    <span class="marquee-item">Branded Content / Contenido de Marca</span>
+    <span class="marquee-item">AI Content / Contenido IA</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="section-label"><span class="en">About me</span><span class="es">Sobre mÃ­</span></div>
+  <div class="about-grid">
+    <div class="about-text">
+      <h2>
+        <span class="en">Audiovisual Producer &amp;<br><em>Video Editor.</em></span>
+        <span class="es">Productor Audiovisual &amp;<br><em>Editor de Video.</em></span>
+      </h2>
+      <p>
+        <span class="en">Audiovisual Producer and Video Editor with strong expertise in visual storytelling, multimedia production, and post-production workflows. Experienced in leading projects from concept development to final delivery, using industry-standard tools such as Adobe Premiere Pro, DaVinci Resolve, and Lightroom, along with advanced color grading techniques.</span>
+        <span class="es">Productor audiovisual y editor de video con profunda experiencia en narrativa visual, producciÃ³n multimedia y flujos de trabajo en post-producciÃ³n. Con experiencia en la direcciÃ³n de proyectos desde el concepto hasta la entrega final, utilizando herramientas como Adobe Premiere Pro, DaVinci Resolve y Lightroom, junto con tÃ©cnicas avanzadas de correcciÃ³n de color.</span>
+      </p>
+      <p>
+        <span class="en">Skilled at transforming complex ideas into engaging visual narratives that enhance brand communication and audience engagement. Experienced in leveraging AI-powered tools and digital production technologies to optimize creative processes and content development. Driven by creative innovation and technical excellence.</span>
+        <span class="es">Especializado en transformar ideas complejas en narrativas visuales que potencian la comunicaciÃ³n de marca y el impacto con la audiencia. Con experiencia en el uso de herramientas de IA y tecnologÃ­as de producciÃ³n digital para optimizar procesos creativos. Impulsado por la innovaciÃ³n y la excelencia tÃ©cnica.</span>
+      </p>
+      <div class="about-stats">
+        <div class="stat"><div class="stat-number">+100</div><div class="stat-label"><span class="en">Projects</span><span class="es">Proyectos</span></div></div>
+        <div class="stat"><div class="stat-number">7+</div><div class="stat-label"><span class="en">Years experience</span><span class="es">AÃ±os de experiencia</span></div></div>
+        <div class="stat"><div class="stat-number">+50</div><div class="stat-label"><span class="en">Clients</span><span class="es">Clientes</span></div></div>
+        <div class="stat"><div class="stat-number">â</div><div class="stat-label"><span class="en">Stories to tell</span><span class="es">Historias por contar</span></div></div>
+      </div>
+    </div>
+    <div class="about-image">
+      <div class="about-image-inner">
+        <img
+          src="https://drive.google.com/thumbnail?id=1fAMjBwo5IY8qkCPqzaXge5JJd2dC9QUa&sz=w800"
+          alt="OUTWVE â Anderson Hernandez"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          onerror="this.classList.add('failed');this.parentElement.classList.add('no-image');"
+        >
+        <div class="about-image-fallback">
+          <div class="fallback-icon">ð¸</div>
+          <div class="fallback-text"><span class="en">Photo</span><span class="es">Foto</span></div>
+        </div>
+      </div>
+      <div class="about-image-tag">
+        <span class="en">Available for projects Â· 2026</span><span class="es">Disponible para proyectos Â· 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="work-header">
+    <h2><span class="en">Projects</span><span class="es">Proyectos</span></h2>
+    <div class="work-filter">
+      <button class="filter-btn active" data-filter="all"><span class="en">All</span><span class="es">Todos</span></button>
+      <button class="filter-btn" data-filter="commercial"><span class="en">Commercial</span><span class="es">Comercial</span></button>
+      <button class="filter-btn" data-filter="personal">Personal</button>
+      <button class="filter-btn" data-filter="music"><span class="en">Music</span><span class="es">MÃºsica</span></button>
+    </div>
+  </div>
+  <div class="projects-grid" id="projectsGrid">
+
+    <div class="project-card" data-category="commercial" onclick="window.open('https://www.instagram.com/p/Cp0wGksp-VG/','_blank')" style="cursor:pointer;">
+      <div class="project-thumb-video">
+        <div class="video-bg"></div>
+        <div class="video-brand-bar"></div>
+        <div class="video-grain"></div>
+        <div class="video-logos">
+          <span class="logo-postobon">PostobÃ³n</span>
+          <span class="logo-divider"></span>
+          <span class="logo-netflix">Netflix</span>
+        </div>
+        <div class="video-title-text">La Primera Vez</div>
+        <span class="project-number">01</span>
+        <span class="project-category-tag">Commercial</span>
+        <div class="play-overlay"><div class="play-overlay-circle"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">PostobÃ³n Ã Netflix â La Primera Vez</h3>
+        <div class="project-meta"><span>Commercial</span><span>March 2023</span></div>
+      </div>
+    </div>
+
+    <div class="project-card" data-category="personal">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1536240478700-b869ad10a2eb?w=800&q=70" alt="Project 02" loading="lazy">
+        <span class="project-number">02</span><span class="project-category-tag">Personal</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 02 â Title here</h3><div class="project-meta"><span>Personal</span><span>2024</span></div></div>
+    </div>
+
+    <div class="project-card" data-category="music">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=70" alt="Project 03" loading="lazy">
+        <span class="project-number">03</span><span class="project-category-tag">Music</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 03 â Title here</h3><div class="project-meta"><span>Music</span><span>2023</span></div></div>
+    </div>
+
+    <div class="project-card" data-category="commercial">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=800&q=70" alt="Project 04" loading="lazy">
+        <span class="project-number">04</span><span class="project-category-tag">Commercial</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 04 â Title here</h3><div class="project-meta"><span>Commercial</span><span>2023</span></div></div>
+    </div>
+
+    <div class="project-card" data-category="personal">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1598387993441-a364f854cfd8?w=800&q=70" alt="Project 05" loading="lazy">
+        <span class="project-number">05</span><span class="project-category-tag">Personal</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 05 â Title here</h3><div class="project-meta"><span>Personal</span><span>2023</span></div></div>
+    </div>
+
+    <div class="project-card" data-category="music">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=70" alt="Project 06" loading="lazy">
+        <span class="project-number">06</span><span class="project-category-tag">Music</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 06 â Title here</h3><div class="project-meta"><span>Music</span><span>2022</span></div></div>
+    </div>
+
+    <div class="project-card" data-category="commercial">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=70" alt="Project 07" loading="lazy">
+        <span class="project-number">07</span><span class="project-category-tag">Commercial</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 07 â Title here</h3><div class="project-meta"><span>Commercial</span><span>2022</span></div></div>
+    </div>
+
+    <div class="project-card" data-category="personal">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=70" alt="Project 08" loading="lazy">
+        <span class="project-number">08</span><span class="project-category-tag">Personal</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 08 â Title here</h3><div class="project-meta"><span>Personal</span><span>2022</span></div></div>
+    </div>
+
+    <div class="project-card" data-category="music">
+      <div class="project-thumb">
+        <img src="https://images.unsplash.com/photo-1598387993441-a364f854cfd8?w=800&q=70" alt="Project 09" loading="lazy">
+        <span class="project-number">09</span><span class="project-category-tag">Music</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info"><h3 class="project-title">Project 09 â Title here</h3><div class="project-meta"><span>Music</span><span>2021</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-label"><span class="en">Services</span><span class="es">Servicios</span></div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke-width="1.2"><rect x="4" y="10" width="32" height="22" rx="2"/><circle cx="20" cy="21" r="5"/><path d="M4 16h36"/></svg>
+      <h3 class="service-title"><span class="en">Video Production</span><span class="es">ProducciÃ³n de Video</span></h3>
+      <p class="service-desc"><span class="en">From commercial spots to documentaries. Full production including pre and post-production, art direction and cinematography.</span><span class="es">Desde spots comerciales hasta documentales. ProducciÃ³n integral con pre y post producciÃ³n, direcciÃ³n de arte y fotografÃ­a.</span></p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke-width="1.2"><path d="M8 28l8-8 6 6 8-10 6 6"/><rect x="4" y="6" width="32" height="28" rx="2"/><circle cx="14" cy="15" r="3"/></svg>
+      <h3 class="service-title"><span class="en">Color Grading</span><span class="es">GradaciÃ³n de Color</span></h3>
+      <p class="service-desc"><span class="en">Color correction and cinematic grading. We define the visual identity of your project with unique and consistent palettes.</span><span class="es">CorrecciÃ³n de color y grading cinematogrÃ¡fico. Definimos la identidad visual de tu proyecto con paletas Ãºnicas y consistentes.</span></p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke-width="1.2"><path d="M20 4l4 8 9 1.3-6.5 6.3 1.5 9L20 24l-8 4.6 1.5-9L7 13.3 16 12z"/></svg>
+      <h3 class="service-title"><span class="en">Creative Direction</span><span class="es">DirecciÃ³n Creativa</span></h3>
+      <p class="service-desc"><span class="en">Concept, storyboard and full direction. We transform abstract ideas into coherent and memorable visual narratives.</span><span class="es">Concepto, storyboard y direcciÃ³n completa. Transformamos ideas abstractas en narrativas visuales coherentes y memorables.</span></p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke-width="1.2"><path d="M36 10l-8 5V14a8 8 0 00-16 0v14a8 8 0 0016 0v-1l8 5V10z"/></svg>
+      <h3 class="service-title"><span class="en">Music Video</span><span class="es">Video Musical</span></h3>
+      <p class="service-desc"><span class="en">Music videos with strong visual identity. Work with independent artists and labels of any genre.</span><span class="es">Videos musicales con identidad visual fuerte. Trabajo con artistas independientes y sellos discogrÃ¡ficos de cualquier gÃ©nero.</span></p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke-width="1.2"><circle cx="20" cy="20" r="6"/><path d="M20 4v4M20 32v4M4 20h4M32 20h4"/><path d="M9 9l3 3M28 28l3 3M28 9l-3 3M9 28l3-3"/><circle cx="20" cy="20" r="14" stroke-dasharray="2 3"/></svg>
+      <h3 class="service-title"><span class="en">AI Content &amp; Automation</span><span class="es">GeneraciÃ³n de contenido y automatizaciÃ³n con IA</span></h3>
+      <p class="service-desc"><span class="en">Generative AI tools and workflow automation to create, optimize and scale digital content. Smart production for brands that want to move faster.</span><span class="es">Herramientas de IA generativa y automatizaciÃ³n de flujos para crear, optimizar y escalar contenido digital. ProducciÃ³n inteligente para marcas que quieren moverse mÃ¡s rÃ¡pido.</span></p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke-width="1.2"><rect x="6" y="8" width="28" height="18" rx="2"/><path d="M12 34h16M20 26v8"/><path d="M14 17l4-4 4 4 4-4"/></svg>
+      <h3 class="service-title"><span class="en">Post-Production</span><span class="es">Post-ProducciÃ³n</span></h3>
+      <p class="service-desc"><span class="en">Editing, motion graphics and sound design. We deliver projects ready for any platform â film, TV, digital or social media.</span><span class="es">EdiciÃ³n, motion graphics y sound design. Entregamos proyectos listos para cualquier plataforma â cine, TV, digital o redes.</span></p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-bg-text">CONNECT</div>
+  <div class="contact-inner">
+    <h2><span class="en">Let's Create</span><span class="es">Creemos Juntos</span></h2>
+    <p><span class="en">Ready to bring your vision to life?</span><span class="es">Â¿Listo para dar vida a tu visiÃ³n?</span></p>
+    <div class="contact-form">
+      <input type="text" placeholder="Your name / Tu nombre" required>
+      <input type="email" placeholder="Your email / Tu correo" required>
+      <textarea rows="5" placeholder="Your message / Tu mensaje" required></textarea>
+      <button class="contact-cta"><span class="en">Send Message</span><span class="es">Enviar Mensaje</span></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">OUTWVE</div>
+  <div class="footer-copy"><span class="en">Â© 2026 OUTWVE. All rights reserved.</span><span class="es">Todos los derechos reservados.</span></div>
+  <div class="footer-location">ð MedellÃ­n, Colombia</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  const isTouch = window.matchMedia('(hover: none)').matches;
+
+  if (!isTouch) {
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+    (function animCursor() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(animCursor); })();
+    document.querySelectorAll('a,button,.project-card,.showreel-wrapper,.filter-btn,.service-card').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('hovered'); ring.classList.add('hovered'); });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('hovered'); ring.classList.remove('hovered'); });
+    });
+  }
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  navLinks.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded','false');
+      document.body.style.overflow = '';
+    });
+  });
+
+  if (!isTouch && window.innerWidth > 768) {
+    (function() {
+      var outer = document.querySelector('.showreel-outer');
+      var wrapper = document.querySelector('.showreel-wrapper');
+      if (!outer || !wrapper) return;
+      function ease(t) { return t<0.5?2*t*t:-1+(4-2*t)*t; }
+      function update() {
+        var rect = outer.getBoundingClientRect();
+        var total = outer.offsetHeight - window.innerHeight;
+        if (total <= 0) return;
+        var t = ease(Math.min(Math.max(0,-rect.top)/total,1));
+        wrapper.style.width = (72+28*t)+'vw';
+        wrapper.style.maxWidth = 'none';
+        wrapper.style.borderRadius = Math.round(14*(1-t))+'px';
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+  } else {
+    var sw = document.querySelector('.showreel-wrapper');
+    if (sw) { sw.style.width='100%'; sw.style.borderRadius='10px'; }
+  }
+
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('.project-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      projectCards.forEach(card => { card.style.display = (filter==='all'||card.dataset.category===filter)?'':'none'; });
+    });
+  });
+
+  document.querySelector('.contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = this.querySelector('input[type="text"]').value;
+    const email = this.querySelector('input[type="email"]').value;
+    const message = this.querySelector('textarea').value;
+    window.location.href = 'mailto:info@outwve.com?subject=OUTWVE Inquiry from '+encodeURIComponent(name)+'&body='+encodeURIComponent(message)+'%0A%0AFrom: '+encodeURIComponent(email);
+    this.reset();
+  });
+</script>
+</body>
+</html>
