@@ -590,15 +590,16 @@
 </section>
 
 <section id="contact">
-  <div class="contact-bg-text">CONNECT</div>
+  <div class="contact-bg-text">OUTWVE</div>
   <div class="contact-inner">
     <h2><span class="en">Let's Create</span><span class="es">Creemos Juntos</span></h2>
     <p><span class="en">Ready to bring your vision to life?</span><span class="es">¿Listo para dar vida a tu visión?</span></p>
     <div class="contact-form">
-      <input type="text" placeholder="Your name / Tu nombre" required>
-      <input type="email" placeholder="Your email / Tu correo" required>
-      <textarea rows="5" placeholder="Your message / Tu mensaje" required></textarea>
-      <button class="contact-cta"><span class="en">Send Message</span><span class="es">Enviar Mensaje</span></button>
+      <input type="text" id="contact-name" placeholder="Your name / Tu nombre" required>
+      <input type="email" id="contact-email" placeholder="Your email / Tu correo" required>
+      <textarea id="contact-message" rows="5" placeholder="Your message / Tu mensaje" required></textarea>
+      <button class="contact-cta" id="contact-btn"><span class="en">Send Message</span><span class="es">Enviar Mensaje</span></button>
+      <p id="contact-status" style="margin-top:16px;font-family:var(--mono);font-size:0.7rem;letter-spacing:0.1em;opacity:0;transition:opacity .3s;"></p>
     </div>
   </div>
 </section>
@@ -678,13 +679,46 @@
     });
   });
 
-  document.querySelector('.contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = this.querySelector('input[type="text"]').value;
-    const email = this.querySelector('input[type="email"]').value;
-    const message = this.querySelector('textarea').value;
-    window.location.href = 'mailto:info@outwve.com?subject=OUTWVE Inquiry from '+encodeURIComponent(name)+'&body='+encodeURIComponent(message)+'%0A%0AFrom: '+encodeURIComponent(email);
-    this.reset();
+  // CONTACT FORM — Formspree
+  const contactBtn = document.getElementById('contact-btn');
+  const contactStatus = document.getElementById('contact-status');
+  contactBtn.addEventListener('click', async () => {
+    const name = document.getElementById('contact-name').value.trim();
+    const email = document.getElementById('contact-email').value.trim();
+    const message = document.getElementById('contact-message').value.trim();
+    if (!name || !email || !message) {
+      contactStatus.textContent = 'Please fill in all fields. / Por favor completa todos los campos.';
+      contactStatus.style.color = '#ff6b6b';
+      contactStatus.style.opacity = '1';
+      return;
+    }
+    contactBtn.disabled = true;
+    contactBtn.style.opacity = '0.5';
+    contactStatus.textContent = 'Sending... / Enviando...';
+    contactStatus.style.color = '#888';
+    contactStatus.style.opacity = '1';
+    try {
+      const res = await fetch('https://formspree.io/f/xbdqjbje', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      });
+      if (res.ok) {
+        contactStatus.textContent = '✓ Message sent! / ¡Mensaje enviado!';
+        contactStatus.style.color = '#6bffb8';
+        document.getElementById('contact-name').value = '';
+        document.getElementById('contact-email').value = '';
+        document.getElementById('contact-message').value = '';
+      } else {
+        contactStatus.textContent = 'Something went wrong. Try again. / Algo salió mal. Intenta de nuevo.';
+        contactStatus.style.color = '#ff6b6b';
+      }
+    } catch {
+      contactStatus.textContent = 'Connection error. / Error de conexión.';
+      contactStatus.style.color = '#ff6b6b';
+    }
+    contactBtn.disabled = false;
+    contactBtn.style.opacity = '1';
   });
 
   // SCROLL REVEAL
