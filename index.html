@@ -48,7 +48,7 @@
     .footer-copy .en, .footer-copy .es { display: inline; }
     .footer-copy .en::after { content: ' | '; opacity: 0.3; }
 
-    /* CURSOR — solo desktop con mouse */
+    /* CURSOR */
     .cursor { position: fixed; width: 8px; height: 8px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s var(--ease), height .2s var(--ease); mix-blend-mode: difference; }
     .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width .35s var(--ease), height .35s var(--ease), opacity .35s; mix-blend-mode: difference; }
     .cursor.hovered { width: 16px; height: 16px; }
@@ -296,7 +296,6 @@
     .project-thumb-video .play-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; transition: opacity .2s var(--ease-out); display: flex; align-items: center; justify-content: center; }
     @media (hover: hover) and (pointer: fine) { .project-thumb-video:hover .play-overlay { opacity: 1; } }
     .project-thumb-video .play-overlay-circle { width: 56px; height: 56px; border: 1.5px solid rgba(255,255,255,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    /* En mobile, play siempre visible */
     @media (max-width: 768px) {
       .project-thumb-video .play-overlay { opacity: 1; background: rgba(0,0,0,0.15); }
     }
@@ -324,7 +323,7 @@
 
 <nav id="navbar">
   <div class="nav-logo">
-    <img src="https://drive.google.com/thumbnail?id=1fNupdMD7Ps34h-HlSfP8CKa-ZWFgoQlB&sz=w400" alt="OUTWVE Logo" style="height: 36px; width: auto;" loading="eager" fetchpriority="high" referrerpolicy="no-referrer"
+    <img src="https://drive.google.com/thumbnail?id=1fNupdMD7Ps34h-HlSfP8CKa-ZWFgoQlB&sz=w400" alt="OUTWVE Logo" style="height: 36px; width: auto;" loading="eager" fetchpriority="high"
       onerror="this.classList.add('failed');this.nextElementSibling.style.display='block';">
     <span class="nav-logo-text">OUTWVE</span>
   </div>
@@ -421,11 +420,11 @@
     </div>
     <div class="about-image">
       <div class="about-image-inner">
+        <!-- ✅ CAMBIO: URL corregida para mobile + referrerpolicy removido -->
         <img
-          src="https://drive.google.com/thumbnail?id=1fAMjBwo5IY8qkCPqzaXge5JJd2dC9QUa&sz=w800"
+          src="https://drive.google.com/uc?export=view&id=1fAMjBwo5IY8qkCPqzaXge5JJd2dC9QUa"
           alt="OUTWVE — Anderson Hernandez"
           loading="lazy"
-          referrerpolicy="no-referrer"
           onerror="this.classList.add('failed');this.parentElement.classList.add('no-image');"
         >
         <div class="about-image-fallback">
@@ -688,7 +687,7 @@
     this.reset();
   });
 
-  // SCROLL REVEAL — IntersectionObserver
+  // SCROLL REVEAL
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const revealEls = document.querySelectorAll('.reveal');
     const revealObs = new IntersectionObserver((entries) => {
