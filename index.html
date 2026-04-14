@@ -709,16 +709,20 @@
         document.getElementById('contact-name').value = '';
         document.getElementById('contact-email').value = '';
         document.getElementById('contact-message').value = '';
+        contactBtn.disabled = false;
+        contactBtn.style.opacity = '1';
       } else {
         contactStatus.textContent = 'Something went wrong. Try again. / Algo salió mal. Intenta de nuevo.';
         contactStatus.style.color = '#ff6b6b';
+        contactBtn.disabled = false;
+        contactBtn.style.opacity = '1';
       }
     } catch {
       contactStatus.textContent = 'Connection error. / Error de conexión.';
       contactStatus.style.color = '#ff6b6b';
+      contactBtn.disabled = false;
+      contactBtn.style.opacity = '1';
     }
-    contactBtn.disabled = false;
-    contactBtn.style.opacity = '1';
   });
 
   // SCROLL REVEAL
