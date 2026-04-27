@@ -217,116 +217,14 @@
     .about-image-tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.4; margin-top: 16px; }
     .about-image-tag .en::after { content: ' · '; opacity: 0.4; }
 
-    /* ============================================================
-       CAMERA TRANSITION — Full screen camera into Projects block
-    ============================================================ */
-    #camera-transition {
-      position: relative;
-      height: 220vh; /* total scroll distance */
-      overflow: visible;
-      perspective: 1600px;
-      perspective-origin: 50% 50%;
-      /* No bottom margin - work section follows directly */
-      margin-bottom: 0;
-    }
-
-    .camera-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform-style: preserve-3d;
-      overflow: hidden;
-    }
-
-    .camera-3d {
-      /* STARTS HUGE — fills the screen */
-      width: clamp(600px, 90vw, 1400px);
-      transform-origin: center center;
-      will-change: transform, opacity;
-      transform: scale(1.2);
-      opacity: 0;
-    }
-
-    .camera-3d img { 
-      width: 100%; 
-      height: auto; 
-      display: block;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-
-    /* Subtle ambient glow */
-    .camera-glow {
-      position: absolute;
-      width: 80vw;
-      height: 80vw;
-      max-width: 1100px;
-      max-height: 1100px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%);
-      pointer-events: none;
-      will-change: opacity, transform;
-      opacity: 0;
-    }
-
-    /* Camera label */
-    .camera-label {
-      position: absolute;
-      bottom: 12%;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-      white-space: nowrap;
-      will-change: opacity, transform;
-      opacity: 0;
-      z-index: 2;
-    }
-
-    .camera-label .en::after { content: ' · '; opacity: 0.4; }
-    .camera-label .es { opacity: 0.7; }
-
-    /* Section divider hint above camera (subtle) */
-    .camera-section-num {
-      position: absolute;
-      top: 8%;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.4em;
-      color: rgba(255,255,255,0.25);
-      opacity: 0;
-      will-change: opacity;
-      z-index: 2;
-    }
-
-    @media (max-width: 768px) {
-      #camera-transition { height: 200vh; }
-      .camera-3d { width: 110vw; }
-      .camera-label { font-size: 0.55rem; bottom: 14%; letter-spacing: 0.22em; }
-      .camera-section-num { font-size: 0.5rem; top: 12%; }
-    }
-
     /* WORK */
     #work { 
       padding: 0 80px 160px; 
-      /* Pull projects up so they overlap with the receding camera */
-      margin-top: -60vh;
-      position: relative;
-      z-index: 5;
     }
 
     @media (max-width: 768px) {
       #work {
         padding: 0 20px 80px;
-        margin-top: -50vh;
       }
     }
     .work-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 64px; flex-wrap: wrap; gap: 24px; }
@@ -617,30 +515,6 @@
       <div class="about-image-tag">
         <span class="en">Available for projects · 2026</span><span class="es">Disponible para proyectos · 2026</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================================================================
-     CAMERA TRANSITION — Real Sony photo with 3D parallax
-================================================================ -->
-<section id="camera-transition" aria-hidden="true">
-  <div class="camera-sticky">
-    <div class="camera-section-num" id="cameraSectionNum">— 03 — PROJECTS</div>
-    <div class="camera-glow" id="cameraGlow"></div>
-    <div class="camera-3d" id="camera3d">
-      <img 
-        src="https://raw.githubusercontent.com/outwve/outwve-assets/main/sony-alpha.png"
-        alt="Sony Alpha Camera"
-        loading="lazy"
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-        style="width: 100%; height: auto; display: block; filter: drop-shadow(0 40px 100px rgba(0,0,0,0.7));"
-        onerror="this.onerror=null; this.src='https://github.com/outwve/outwve-assets/blob/main/sony-alpha.png?raw=true';"
-      />
-    </div>
-    <div class="camera-label" id="cameraLabel">
-      <span class="en">Behind the lens</span><span class="es">Detrás del lente</span>
     </div>
   </div>
 </section>
@@ -1036,161 +910,64 @@
 
 
 /* ================================================================
-   CAMERA TRANSITION — Full screen → integrates with Projects
-   
-   Phases:
-   0.00 - 0.15 → fade in HUGE (fills screen)
-   0.15 - 0.40 → hold full size + breathe (claim the section)
-   0.40 - 0.75 → shrinks down + recedes back
-   0.75 - 1.00 → small visible accent while projects show
+   PROJECTS FADE-IN — Smooth cascade reveal as section enters viewport
+   - Header fades in first
+   - Then each project card fades in with stagger
+   - Apple-style: smooth, subtle, with slight upward motion
 ================================================================ */
-(function initCameraTransition() {
-  const section    = document.getElementById('camera-transition');
-  const camera     = document.getElementById('camera3d');
-  const glow       = document.getElementById('cameraGlow');
-  const label      = document.getElementById('cameraLabel');
-  const sectionNum = document.getElementById('cameraSectionNum');
-  const work       = document.getElementById('work');
-  if (!section || !camera || !work) return;
+(function initProjectsReveal() {
+  const work        = document.getElementById('work');
+  const workHeader  = document.querySelector('.work-header');
+  const projectCards = document.querySelectorAll('.project-card');
+  if (!work) return;
 
-  // Easing
-  function easeOutCubic(t)  { return 1 - Math.pow(1 - t, 3); }
-  function easeInCubic(t)   { return t * t * t; }
-  function easeInOutCubic(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
-
-  // Lerp state
-  let currentT = 0;
-  let targetT  = 0;
-  let rafId    = null;
-
-  // Initial state — projects hidden
-  work.style.opacity   = '0';
-  work.style.transform = 'translateY(60px)';
-  work.style.transition = 'none';
-  work.style.willChange = 'opacity, transform';
-
-  function getProgress() {
-    const rect  = section.getBoundingClientRect();
-    const total = section.offsetHeight - window.innerHeight;
-    if (total <= 0) return 0;
-    return Math.min(Math.max(-rect.top / total, 0), 1);
+  // Set initial states
+  if (workHeader) {
+    workHeader.style.opacity = '0';
+    workHeader.style.transform = 'translateY(40px)';
+    workHeader.style.transition = 'opacity 0.9s cubic-bezier(0.23,1,0.32,1), transform 0.9s cubic-bezier(0.23,1,0.32,1)';
   }
 
-  function applyT(t) {
-    let scale, translateZ, translateY, rotateY, rotateX, opacity;
-    let glowOpacity, glowScale;
-    let labelOpacity, labelY;
-    let numOpacity;
+  projectCards.forEach((card, i) => {
+    // Preserve nth-child(even) translateY offset on desktop
+    const isEven = (i + 1) % 2 === 0;
+    const isMobile = window.innerWidth <= 768;
+    const baseOffset = (isEven && !isMobile) ? 64 : 0;
+    
+    card.style.opacity = '0';
+    card.style.transform = `translateY(${50 + baseOffset}px)`;
+    card.style.transition = `opacity 0.9s cubic-bezier(0.23,1,0.32,1) ${i * 0.08}s, transform 1s cubic-bezier(0.23,1,0.32,1) ${i * 0.08}s`;
+    card.dataset.baseOffset = baseOffset;
+  });
 
-    if (t < 0.15) {
-      // Phase 1: HUGE camera APPEARS — fills the screen, claims the section
-      const p = easeOutCubic(t / 0.15);
-      scale       = 1.2 - p * 0.2;            // 1.2 → 1.0 (slight settle)
-      translateZ  = -200 + p * 200;
-      translateY  = 0;
-      rotateY     = -8 + p * 8;
-      rotateX     = 5 - p * 5;
-      opacity     = p;
-      glowOpacity = p * 0.9;
-      glowScale   = 0.8 + p * 0.4;
-      labelOpacity = p * 0.5;
-      labelY      = 20 - p * 20;
-      numOpacity  = p * 0.6;
-    } else if (t < 0.40) {
-      // Phase 2: HOLD full size — breathing, claiming the section
-      const p = (t - 0.15) / 0.25;
-      const eP = easeInOutCubic(p);
-      
-      const breathe = Math.sin(eP * Math.PI * 1.5) * 0.015;
-      scale       = 1.0 + breathe;
-      translateZ  = 0 + Math.sin(eP * Math.PI) * 20;
-      translateY  = 0;
-      rotateY     = 0 + eP * 3;
-      rotateX     = 0 + Math.sin(eP * Math.PI) * 1.5;
-      opacity     = 1;
-      glowOpacity = 0.9;
-      glowScale   = 1.2 + breathe;
-      labelOpacity = 0.5 + eP * 0.3;
-      labelY      = 0;
-      numOpacity  = 0.6 + eP * 0.2;
-    } else if (t < 0.75) {
-      // Phase 3: SHRINK & RECEDE — camera moves back/up, projects start showing
-      const p = (t - 0.40) / 0.35;
-      const eP = easeInOutCubic(p);
-      
-      scale       = 1.0 - eP * 0.7;            // 1.0 → 0.3
-      translateZ  = 20 - eP * 800;
-      translateY  = 0 - eP * 30;               // floats up
-      rotateY     = 3 + eP * 25;
-      rotateX     = 1.5 - eP * 8;
-      opacity     = 1 - eP * 0.55;             // 1 → 0.45
-      glowOpacity = 0.9 - eP * 0.85;
-      glowScale   = 1.2 - eP * 0.6;
-      labelOpacity = 0.8 - eP * 0.8;
-      labelY      = 0 - eP * 30;
-      numOpacity  = 0.8 - eP * 0.8;
-    } else {
-      // Phase 4: Small visible accent — sits behind projects subtly
-      const p = (t - 0.75) / 0.25;
-      const eP = easeOutCubic(p);
-      
-      scale       = 0.30 - eP * 0.10;
-      translateZ  = -780 - eP * 200;
-      translateY  = -30 - eP * 15;
-      rotateY     = 28 + eP * 12;
-      rotateX     = -6.5 - eP * 4;
-      opacity     = 0.45 - eP * 0.20;          // settles ~0.25
-      glowOpacity = 0.05 - eP * 0.05;
-      glowScale   = 0.6;
-      labelOpacity = 0;
-      labelY      = -30;
-      numOpacity  = 0;
-    }
-
-    // Apply camera transform
-    camera.style.transform = `translateY(${translateY.toFixed(1)}px) translateZ(${translateZ.toFixed(1)}px) scale(${scale.toFixed(3)}) rotateY(${rotateY.toFixed(1)}deg) rotateX(${rotateX.toFixed(1)}deg)`;
-    camera.style.opacity   = opacity.toFixed(3);
-
-    if (glow) {
-      glow.style.opacity   = glowOpacity.toFixed(3);
-      glow.style.transform = `scale(${glowScale.toFixed(3)})`;
-    }
-
-    if (label) {
-      label.style.opacity   = labelOpacity.toFixed(3);
-      label.style.transform = `translateX(-50%) translateY(${labelY.toFixed(1)}px)`;
-    }
-
-    if (sectionNum) {
-      sectionNum.style.opacity = numOpacity.toFixed(3);
-    }
-
-    /* PROJECTS REVEAL: starts at t=0.55 (camera shrinking), full at t=0.85 */
-    let projectsP = 0;
-    if (t > 0.55) {
-      projectsP = Math.min((t - 0.55) / 0.30, 1);
-    }
-    const eProj = easeOutCubic(projectsP);
-    work.style.opacity   = eProj.toFixed(3);
-    work.style.transform = `translateY(${(60 - eProj * 60).toFixed(1)}px)`;
+  // Header observer
+  if (workHeader) {
+    const headerObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          workHeader.style.opacity = '1';
+          workHeader.style.transform = 'translateY(0)';
+          headerObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -80px 0px' });
+    headerObs.observe(workHeader);
   }
 
-  function tick() {
-    rafId = requestAnimationFrame(tick);
-    targetT = getProgress();
+  // Cards observer — staggered reveal
+  const cardObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const baseOffset = parseInt(card.dataset.baseOffset || '0', 10);
+        card.style.opacity = '1';
+        card.style.transform = `translateY(${baseOffset}px)`;
+        cardObs.unobserve(card);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 
-    // Lerp for buttery smooth feel
-    currentT += (targetT - currentT) * 0.10;
-    if (Math.abs(currentT - targetT) < 0.0003) currentT = targetT;
-
-    applyT(currentT);
-  }
-
-  applyT(0);
-  rafId = requestAnimationFrame(tick);
-
-  // Recompute on resize
-  window.addEventListener('resize', () => applyT(currentT), { passive: true });
+  projectCards.forEach(card => cardObs.observe(card));
 })();
 
 
