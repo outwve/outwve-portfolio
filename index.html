@@ -630,11 +630,17 @@
     <div class="camera-glow" id="cameraGlow"></div>
     <div class="camera-3d" id="camera3d">
       <img 
-        src="https://raw.githubusercontent.com/outwve/outwve-assets/main/sony-alpha.png"
+        src="https://github.com/outwve/outwve-assets/blob/main/sony-alpha.png?raw=true"
         alt="Sony Alpha Camera"
         loading="lazy"
         style="width: 100%; height: auto; display: block; filter: drop-shadow(0 40px 100px rgba(0,0,0,0.7));"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
       />
+      <div style="display:none;width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,#1a1a1a,#0a0a0a);border:1px solid #333;align-items:center;justify-content:center;flex-direction:column;color:#666;font-family:monospace;font-size:0.8rem;text-align:center;padding:20px;">
+        <div style="font-size:2rem;margin-bottom:10px;">📷</div>
+        <div>Image failed to load</div>
+        <div style="opacity:0.5;margin-top:8px;font-size:0.7rem;">Check the GitHub link</div>
+      </div>
     </div>
     <div class="camera-label" id="cameraLabel">
       <span class="en">Behind the lens</span><span class="es">Detrás del lente</span>
