@@ -442,6 +442,92 @@
       .stat-number { font-size: 1.6rem; }
     }
 
+    /* GRAPHIC PROJECT CARDS — unified style */
+    .project-thumb-graphic {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      background: var(--card-bg, #0a0a0a);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-noise {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.5;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+    .card-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 3px;
+      background: var(--card-accent, #fff);
+      opacity: 0.9;
+    }
+    .card-line.top { top: 0; }
+    .card-line.bottom { bottom: 0; }
+    .card-center {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px 24px;
+    }
+    .card-brand {
+      font-family: var(--mono);
+      font-size: clamp(0.7rem, 1.6vw, 1rem);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .card-divider {
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--card-accent, #fff);
+      opacity: 0.6;
+      margin: 14px auto;
+    }
+    .card-type {
+      font-family: var(--mono);
+      font-size: clamp(0.52rem, 1.1vw, 0.7rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--card-accent, #fff);
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+    .project-thumb-graphic .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      opacity: 0;
+      transition: opacity .2s var(--ease-out);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .project-thumb-graphic:hover .project-overlay { opacity: 1; }
+    }
+    @media (hover: none) {
+      .project-card:active .project-thumb-graphic .project-overlay { opacity: 1; }
+    }
+    @media (max-width: 768px) {
+      .project-thumb-graphic .project-overlay { opacity: 1; background: rgba(0,0,0,0.15); }
+    }
+
     /* PROJECT 01 */
     .project-thumb-video { position: relative; overflow: hidden; aspect-ratio: 4/5; background: #0a0a0a; cursor: pointer; }
     .project-thumb-video .video-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #1a0008 0%, #2d0010 25%, #0d0000 60%, #000 100%); }
@@ -591,6 +677,10 @@
         <span class="en">Skilled at transforming complex ideas into engaging visual narratives that enhance brand communication and audience engagement. Experienced in leveraging AI-powered tools and digital production technologies to optimize creative processes and content development. Driven by creative innovation and technical excellence.</span>
         <span class="es">Especializado en transformar ideas complejas en narrativas visuales que potencian la comunicación de marca y el impacto con la audiencia. Con experiencia en el uso de herramientas de IA y tecnologías de producción digital para optimizar procesos creativos. Impulsado por la innovación y la excelencia técnica.</span>
       </p>
+      <p>
+        <span class="en">Graduated as an Audiovisual Communicator in 2024, combining academic training with years of real-world production experience across commercial, music, and branded content.</span>
+        <span class="es">Comunicador Audiovisual graduado en 2024, combinando formación académica con años de experiencia real en producción comercial, musical y de contenido de marca.</span>
+      </p>
       <div class="about-stats">
         <div class="stat"><div class="stat-number">+100</div><div class="stat-label"><span class="en">Projects</span><span class="es">Proyectos</span></div></div>
         <div class="stat"><div class="stat-number">7+</div><div class="stat-label"><span class="en">Years experience</span><span class="es">Años de experiencia</span></div></div>
@@ -630,19 +720,18 @@
   <div class="projects-grid" id="projectsGrid">
     <!-- 01 Postobón × Netflix -->
     <div class="project-card" data-category="commercial" onclick="window.open('https://www.instagram.com/p/Cp0wGksp-VG/','_blank')">
-      <div class="project-thumb-video">
-        <div class="video-bg"></div>
-        <div class="video-brand-bar"></div>
-        <div class="video-grain"></div>
-        <div class="video-logos">
-          <span class="logo-postobon">Postobón</span>
-          <span class="logo-divider"></span>
-          <span class="logo-netflix">Netflix</span>
+      <div class="project-thumb-graphic" style="--card-bg:#0a0a0a; --card-accent:#E8002D;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">Postobón × Netflix</span>
+          <span class="card-divider"></span>
+          <span class="card-type">Commercial</span>
         </div>
-        <div class="video-title-text">La Primera Vez</div>
         <span class="project-number">01</span>
         <span class="project-category-tag">Commercial</span>
-        <div class="play-overlay"><div class="play-overlay-circle"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
       </div>
       <div class="project-info">
         <h3 class="project-title">Postobón × Netflix — La Primera Vez</h3>
@@ -652,9 +741,155 @@
 
     <!-- 02 Redbull × Licoexpress -->
     <div class="project-card" data-category="commercial" onclick="window.open('https://www.instagram.com/p/CpfSk2lN-pT/','_blank')">
+      <div class="project-thumb-graphic" style="--card-bg:#0d0000; --card-accent:#C8102E;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">Redbull × Licoexpress</span>
+          <span class="card-divider"></span>
+          <span class="card-type">Commercial</span>
+        </div>
+        <span class="project-number">02</span>
+        <span class="project-category-tag">Commercial</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">Redbull × Licoexpress</h3>
+        <div class="project-meta"><span>Commercial</span><span>2023</span></div>
+      </div>
+    </div>
+
+    <!-- 03 Pintuco -->
+    <div class="project-card" data-category="commercial" onclick="window.open('https://www.instagram.com/p/Cf42CYAJK4R/','_blank')">
+      <div class="project-thumb-graphic" style="--card-bg:#000a05; --card-accent:#00A651;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">Pintuco</span>
+          <span class="card-divider"></span>
+          <span class="card-type">Commercial</span>
+        </div>
+        <span class="project-number">03</span>
+        <span class="project-category-tag">Commercial</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">Pintuco</h3>
+        <div class="project-meta"><span>Commercial</span><span>2022</span></div>
+      </div>
+    </div>
+
+    <!-- 04 DJ SET -->
+    <div class="project-card" data-category="music" onclick="window.open('https://www.youtube.com/watch?v=lhlur2kt2Z0','_blank')">
+      <div class="project-thumb-graphic" style="--card-bg:#060010; --card-accent:#9B59B6;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">DJ SET</span>
+          <span class="card-divider"></span>
+          <span class="card-type">Music · Live</span>
+        </div>
+        <span class="project-number">04</span>
+        <span class="project-category-tag">Music</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">DJ SET</h3>
+        <div class="project-meta"><span>Music</span><span>2023</span></div>
+      </div>
+    </div>
+
+    <!-- 05 Humildes Pero Capos -->
+    <div class="project-card" data-category="music" onclick="window.open('https://www.youtube.com/watch?v=mGNNWDA-nWI','_blank')">
+      <div class="project-thumb-graphic" style="--card-bg:#080800; --card-accent:#F1C40F;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">Humildes Pero Capos</span>
+          <span class="card-divider"></span>
+          <span class="card-type">Videoclip · Xima-Xabi</span>
+        </div>
+        <span class="project-number">05</span>
+        <span class="project-category-tag">Music</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">Videoclip — Humildes Pero Capos</h3>
+        <div class="project-meta"><span>Music</span><span>2024</span></div>
+      </div>
+    </div>
+
+    <!-- 06 Pégate -->
+    <div class="project-card" data-category="music" onclick="window.open('https://www.youtube.com/watch?v=0q2gmxJtm1o','_blank')">
+      <div class="project-thumb-graphic" style="--card-bg:#00060d; --card-accent:#3498DB;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">Pégate</span>
+          <span class="card-divider"></span>
+          <span class="card-type">Videoclip · Cheo Gallego × Jhan Cardona</span>
+        </div>
+        <span class="project-number">06</span>
+        <span class="project-category-tag">Music</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">Videoclip — Cheo Gallego × Jhan Cardona</h3>
+        <div class="project-meta"><span>Music</span><span>2025</span></div>
+      </div>
+    </div>
+
+    <!-- 07 Webinar Hydrop -->
+    <div class="project-card" data-category="commercial" onclick="window.open('https://youtu.be/ANsfR6goUw4','_blank')">
+      <div class="project-thumb-graphic" style="--card-bg:#000d0d; --card-accent:#1ABC9C;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">Hydrop</span>
+          <span class="card-divider"></span>
+          <span class="card-type">Webinar · 2025</span>
+        </div>
+        <span class="project-number">07</span>
+        <span class="project-category-tag">Webinar</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">Webinar — Hydrop</h3>
+        <div class="project-meta"><span>Commercial</span><span>2025</span></div>
+      </div>
+    </div>
+
+    <!-- 08 VSL Hydrop -->
+    <div class="project-card" data-category="commercial" onclick="window.open('https://youtu.be/Yy30pXqLI6E','_blank')">
+      <div class="project-thumb-graphic" style="--card-bg:#0a0800; --card-accent:#E67E22;">
+        <div class="card-noise"></div>
+        <div class="card-line top"></div>
+        <div class="card-line bottom"></div>
+        <div class="card-center">
+          <span class="card-brand">Hydrop</span>
+          <span class="card-divider"></span>
+          <span class="card-type">VSL · 2026</span>
+        </div>
+        <span class="project-number">08</span>
+        <span class="project-category-tag">VSL</span>
+        <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">VSL — Hydrop</h3>
+        <div class="project-meta"><span>Commercial</span><span>2026</span></div>
+      </div>
+    </div>
+
+    <!-- 02 Redbull × Licoexpress -->
+    <div class="project-card" data-category="commercial" onclick="window.open('https://www.instagram.com/p/CpfSk2lN-pT/','_blank')">
       <div class="project-thumb">
-        <img src="https://i.ytimg.com/vi/lhlur2kt2Z0/maxresdefault.jpg" alt="Redbull x Licoexpress" loading="lazy"
-          onerror="this.src='https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=800&q=70'">
+        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=70" alt="Redbull x Licoexpress" loading="lazy">
         <span class="project-number">02</span>
         <span class="project-category-tag">Commercial</span>
         <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
@@ -668,7 +903,7 @@
     <!-- 03 Pintuco -->
     <div class="project-card" data-category="commercial" onclick="window.open('https://www.instagram.com/p/Cf42CYAJK4R/','_blank')">
       <div class="project-thumb">
-        <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&q=70" alt="Pintuco" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=70" alt="Pintuco" loading="lazy">
         <span class="project-number">03</span>
         <span class="project-category-tag">Commercial</span>
         <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
@@ -683,7 +918,7 @@
     <div class="project-card" data-category="music" onclick="window.open('https://www.youtube.com/watch?v=lhlur2kt2Z0','_blank')">
       <div class="project-thumb">
         <img src="https://i.ytimg.com/vi/lhlur2kt2Z0/maxresdefault.jpg" alt="DJ SET" loading="lazy"
-          onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=70'">
+          onerror="this.src='https://i.ytimg.com/vi/lhlur2kt2Z0/hqdefault.jpg'">
         <span class="project-number">04</span>
         <span class="project-category-tag">Music</span>
         <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
@@ -697,8 +932,8 @@
     <!-- 05 Videoclip — Humildes Pero Capos -->
     <div class="project-card" data-category="music" onclick="window.open('https://www.youtube.com/watch?v=mGNNWDA-nWI','_blank')">
       <div class="project-thumb">
-        <img src="https://i.ytimg.com/vi/mGNNWDA-nWI/maxresdefault.jpg" alt="Videoclip - Humildes Pero Capos" loading="lazy"
-          onerror="this.src='https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=70'">
+        <img src="https://i.ytimg.com/vi/mGNNWDA-nWI/maxresdefault.jpg" alt="Humildes Pero Capos - Xima-Xabi" loading="lazy"
+          onerror="this.src='https://i.ytimg.com/vi/mGNNWDA-nWI/hqdefault.jpg'">
         <span class="project-number">05</span>
         <span class="project-category-tag">Music</span>
         <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
@@ -712,8 +947,8 @@
     <!-- 06 Videoclip — Cheo Gallego × Jhan Cardona -->
     <div class="project-card" data-category="music" onclick="window.open('https://www.youtube.com/watch?v=0q2gmxJtm1o','_blank')">
       <div class="project-thumb">
-        <img src="https://i.ytimg.com/vi/0q2gmxJtm1o/maxresdefault.jpg" alt="Videoclip - Pegate" loading="lazy"
-          onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=70'">
+        <img src="https://i.ytimg.com/vi/0q2gmxJtm1o/maxresdefault.jpg" alt="Pegate - Cheo Gallego x Jhan Cardona" loading="lazy"
+          onerror="this.src='https://i.ytimg.com/vi/0q2gmxJtm1o/hqdefault.jpg'">
         <span class="project-number">06</span>
         <span class="project-category-tag">Music</span>
         <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
@@ -728,13 +963,13 @@
     <div class="project-card" data-category="commercial" onclick="window.open('https://youtu.be/ANsfR6goUw4','_blank')">
       <div class="project-thumb">
         <img src="https://i.ytimg.com/vi/ANsfR6goUw4/maxresdefault.jpg" alt="Webinar Hydrop" loading="lazy"
-          onerror="this.src='https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=70'">
+          onerror="this.src='https://i.ytimg.com/vi/ANsfR6goUw4/hqdefault.jpg'">
         <span class="project-number">07</span>
         <span class="project-category-tag">Webinar</span>
         <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
       </div>
       <div class="project-info">
-        <h3 class="project-title">Webinar — Hydrop 2025</h3>
+        <h3 class="project-title">Webinar — Hydrop</h3>
         <div class="project-meta"><span>Commercial</span><span>2025</span></div>
       </div>
     </div>
@@ -743,7 +978,7 @@
     <div class="project-card" data-category="commercial" onclick="window.open('https://youtu.be/Yy30pXqLI6E','_blank')">
       <div class="project-thumb">
         <img src="https://i.ytimg.com/vi/Yy30pXqLI6E/maxresdefault.jpg" alt="VSL Hydrop" loading="lazy"
-          onerror="this.src='https://images.unsplash.com/photo-1598387993441-a364f854cfd8?w=800&q=70'">
+          onerror="this.src='https://i.ytimg.com/vi/Yy30pXqLI6E/hqdefault.jpg'">
         <span class="project-number">08</span>
         <span class="project-category-tag">VSL</span>
         <div class="project-overlay"><div class="project-overlay-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 3l10 5-10 5V3z"/></svg></div></div>
